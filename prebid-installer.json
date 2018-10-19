@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "prebid-installer",
+  "private_key_id": "4ed1d40b334419487b42a51f648c5a07e7682a42",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCWDFyfKKYlDc7y\nX81SpZ7RW57ReLYKJPhaX93croi2z96UafaUWOfYoS79aADUVptDs4Uwx9TMPzen\nra0Y3uE/v3+yXmZUQyIfv4o29+KyLMT5OgbJyw8qKAhGHk9Ncpa92x4NnFLtoqiW\nnsbCcMctDVv1LZ/TN+b+oe7SIxRbyg0wpjJFsy5BzBv7GLuHD5Ja0BFecm1Cn1q6\na5aeOeEHVcSvGI2MbC+z51ziNNbNQaJkKSV0Q5q7XVz+5pmkWSAirWRqFVZ7MSv9\nRoMaE2jcoLL77vRiYvunpPkNLeNFldQzBLi7tI1SmijkiIrs5T36CZXQF7DWQkj1\n6bTBh1A7AgMBAAECggEALEsF5G3JbdK/rkidgbImScL0BP3PLvtu3K7D/WsALIb8\nO290PKJp/kbGakOTSxstxjRuMtIqfQiEU1kvadIRSBItjefT6TfQEPMnx8YxA0u3\n8aIxcswgc99RYfF8k24qFW1jV703tbJ4dc30+lz0TtZMuPl43o73/16p8xor3lQ4\nyJgsbS7MDZM7/OTbZKSwkYo71nnEp9o3UlQ8sfUX+ToPIi19+BDtMjmxWmfkgZ2u\nAp2rXCqo6tPoRweXl8kMHf6aWNTZY/NPWk33LYAEd9IUKAJ6fEK+kJ2jyXrOn+1Y\npoJdG7gZe9Ld6GilRXXm+Nmk6Sihar7NHTor0OSDgQKBgQDR6jo5BCDSFt1yfkUr\n3IKwSCMAY+srtFiwtZPeKTY9QY7HoXQf5lh7j+pjmonyGgahW6z+r2UwWru3Ycdg\nKupso6wllljLUxQoRAXwXW+47CFw80wzW5LZgw4M+DR9j9p9Oa6Y9X2gdX4j2Tz5\nNMlb67u6HtW6p6mCSDMwa2jzGwKBgQC2/Xhs5F7r3rim5G1mn/1RkZf0hNeCvr/H\n5CMiKEs0AT6iRhWyyEIpBellGUidfPlSYklPyucU9DETKw7H/7WhOJ+weiKeJfXa\n3bsJGOiTwYOE6SItrxBaoOve8LVuxx61shP9+hIfVZNNiuCt+5tO7LYbzrhBI+2n\nDVDFItnJYQKBgQCm6vrrNaYniPkEPvYf/5OIO4RhnhJ1yU2xDmILiXfQ092GTpM5\nfoAjmPfHxi4k7p8RFgYE61GqVqvoEX9psBaC1s9fgCMRYvmnXxfd316kjFe3KjAQ\nsqOeBIFavM94fLg/VWvJw4Pm4SaxuN+sRlZLmrLHOBe5+fJnX6Qcv3xPuwKBgBXJ\nihwU+MRGqV+dlPUCGYwrtJb1dh9oDLeFDzXS7FlNyKJTi+PUeiQeQxK5du7hYWIQ\nt7/bXbYd+PXaS5E+fearMkA12odP57zeZ5WGtLJa+QjLJTmhPWY9ALhzmnaNGLfz\ncvPrYVr/umEiJuwwJ+a2wlv/Oervly0rpbFDHAEhAoGBAI2SU+XuQZpDXYT04inJ\nPc18T6KteCxoR2OMxfqMjFhob7V8IQgANWb5LdmKigoGM4jTVTAeHFYlxvN9pPFj\nBuHnI68XXQHNF2LDbv0Ayrh0MSf8j08rnzDK0nLRnTiGmishXrCewSGt7NJ6Z6RT\nK/2NFnG1aAjYiKOWR4B3Nyn3\n-----END PRIVATE KEY-----\n",
+  "client_email": "prebid-installer@prebid-installer.iam.gserviceaccount.com",
+  "client_id": "102466119403466343544",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/prebid-installer%40prebid-installer.iam.gserviceaccount.com"
+}
