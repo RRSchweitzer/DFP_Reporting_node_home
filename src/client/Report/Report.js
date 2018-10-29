@@ -1,46 +1,42 @@
 import React from 'react';
-import Select from 'react-select';
 
 const divStyle = {
-  width: '300px',
+  width: '100%',
   display: 'inline-block',
   marginTop: '5px'
-// textAlign: 'center'
 };
-const handleChange = selectedOption => {
-    this.setState({ selectedOption });
-    console.log('Option selected:', selectedOption);
-}
 
-const getKeys = networkId => {
-  fetch('/api/getKeys?networkId=' + networkId, {method:'get', headers: {'Access-Control-Allow-Origin': '*'}})
-    .then(res => res.json())
-    .then(keys => this.setState({
-      keys: keys,
-      keysGot: true
-    }));
-}
-  let keysOrButton = null;
-
-// const { selectedOption } = this.state.selectedOption;
-
-const Keys = props  => {
-    if (props.state.keysGot === true) {
-       keysOrButton = ( 
-          <Select
-            isSearchable={true}
-            isMulti={true}
-            value={props.state.selectedOption}
-            onChange={handleChange}
-            options={props.state.keys}
-          />
-      )
+const formatDate = (date) => {
+  let dd = date.getDate();
+  let mm = date.getMonth()+1; //January is 0!
+  let yyyy = date.getFullYear();
+  if (dd<10) {
+        dd='0'+dd
+    } 
+    if (mm<10) {
+        mm='0'+mm
     }
-    return (
-      <div style={divStyle}>
-        {keysOrButton}
-      </div>
-    )
+    let returndate = yyyy+'-'+mm+'-'+dd;
+    return returndate;
 }
 
-export default Keys;
+let today = formatDate(new Date());
+let prevDays = formatDate(new Date(new Date().setDate(new Date().getDate()-7)));
+
+
+
+const Report = props  => {
+  return (
+    <div style={divStyle}>
+      <div className="inputs">Start Date:
+       <input id="date-field" class="form-control strdate" min="1996-02-01" type="date" name="strtdate" required></input>
+      </div>
+      <div className="inputs">End Date:
+       <input id="date-field" className="form-control enddate" min="1996-02-01" type="date" name="enddate" required></input>
+      </div>
+      <button className="getReport btn btn-secondary">Submit</button>
+    </div>
+  )
+}
+
+export default Report;

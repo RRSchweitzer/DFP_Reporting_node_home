@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './app.css';
 import ReactImage from './react.png';
 import Networks from './Networks/Networks.js';
+import Report from './Report/Report.js';
 import axios from 'axios';
 import Select from 'react-select';
 
@@ -9,27 +10,26 @@ const divStyle = {
   width: '300px',
   display: 'inline-block',
   marginTop: '5px'
-// textAlign: 'center'
 };
-  const customStyles = {
-    // option: (base, state) => ({
-    //   ...base,
-    //   borderBottom: '1px dotted pink',
-    //   color: state.isFullscreen ? 'red' : 'blue',
-    //   padding: 20,
-    //   width: 800
-    // }),
 
-  }
+const networkStyle = {
+  "backgroundColor": "hsl(0,0%,100%)",
+  "borderColor": "hsl(0,0%,80%)",
+  "borderRadius": "4px",
+  "borderStyle": "solid",
+  "borderWidth": "1px",
+  "height": "40px",
+  "width": "300px"
+};
 
 export default class App extends Component {
   state = { 
     networks: [],
     selectedNetwork: "",
     keys: [],
-    keysGot: false,
+    networkSelected: false,
     multiSelect: true,
-    selectedOption: null,
+    selectedOption: [],
   }
 
 
@@ -38,7 +38,7 @@ export default class App extends Component {
       .then(res => res.json())
       .then(keys => this.setState({
         keys: keys,
-        keysGot: true
+        networkSelected: true
       }));
   }
 
@@ -72,13 +72,13 @@ export default class App extends Component {
   }
 
   render() {
-    let keysfield = null
+    let keyComponent = null
+    let reportComponent = null
     const { selectedOption } = this.state;
-    if (this.state.keysGot === true) {
-      keysfield = (
+    if (this.state.networkSelected === true) {
+      keyComponent = (
         <div style={divStyle}>
           <Select
-            styles={customStyles}
             isSearchable={true}
             isMulti={true}
             value={selectedOption}
@@ -88,12 +88,20 @@ export default class App extends Component {
         </div>
       )
     }
+    if (this.state.selectedOption !== null && this.state.selectedOption.length > 0) {
+      reportComponent = (
+        <Report
+          styles={divStyle}
+        />
+      )
+    }
     return (
       <div>
         {<Networks  toggleNetwork={() => this.toggleNetwork()}
-                    networks={this.state.networks}/>}
-        {keysfield}
-        <img src={ReactImage} alt="react" />
+                    networks={this.state.networks}
+                    styles={networkStyle}/>}
+        {keyComponent}
+        {reportComponent}
       </div>
     );
   }
