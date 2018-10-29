@@ -24,8 +24,8 @@ app.use(bodyParser.json());
 // Endpoints
 app.use(express.static('dist'));
 app.get('/api/getNetworks', networkCtrl.getNetworks);
-app.get('/getKeys', keysCtrl.getKeys);
-app.get('/getReporting', reportCtrl.pullReporting);
+app.get('/api/getKeys', keysCtrl.getKeys);
+app.get('/api/getReporting', reportCtrl.pullReporting);
 app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
 
 

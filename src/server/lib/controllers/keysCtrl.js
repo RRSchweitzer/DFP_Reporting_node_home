@@ -1,10 +1,11 @@
 const Dfp = require('node-google-dfp');
 const {JWT} = require('google-auth-library');
+const config = require('../../../../config.json');
+const jwtClient = new JWT(config.serviceAccountEmail, config.prebidKey , null, ['https://www.googleapis.com/auth/dfp']);
 
-const getAllKeys = () => {
+const getAllKeys = (networkId) => {
   return new Promise ((resolve, reject) => {
-    // const jwtClient = new JWT(config.serviceAccountEmail, config.prebidKey , null, ['https://www.googleapis.com/auth/dfp']);
-    dfpUser = new Dfp.User(config.networkCode, config.appName, config.version);
+    dfpUser = new Dfp.User(networkId, config.appName, config.version);
     dfpUser.setClient(jwtClient);
     dfpUser.getService('CustomTargetingService', (err, CustomTargetingService) => {
       if (err) {
@@ -33,12 +34,14 @@ const getAllKeys = () => {
   })
 }
 
-let keyNameArr = [];
-const getKeyNames =() => {
-  return getAllKeys().then(result => {
+const getKeyNames =(networkId) => {
+  let keyNameArr = [];
+  // options =[{ value: 'chocolate', label: 'Chocolate' }]; 
+   // value: 'chocolate', label: 'Chocolate' },
+  return getAllKeys(networkId).then(result => {
     for (let i = 0; i < result.length; i++) {
       if (result[i].name.split('_')[0] === "hb" || result[i].name.split('_')[0] === "rpfl") {
-        keyNameArr.push(result[i].name)
+        keyNameArr.push({ "value": result[i].name, "label": result[i].name })
       }
     }
     return keyNameArr
@@ -49,10 +52,10 @@ const getKeyNames =() => {
 
 module.exports = {
   getKeys: (req, res) => {
-    console.log(req)
+    console.log(req.query.networkId)
     //path to file you're serving
     let keyNames = [];
-    getKeyNames()
+    getKeyNames(req.query.networkId)
     .then(keys => {
       res.status(200).json(keys);
       // res.send(keys)
