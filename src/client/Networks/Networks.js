@@ -12,7 +12,7 @@ const Networks = ( props ) => {
       <select id="funtime" style={props.styles}
         value={props.selectedNetwork}
         onChange={props.toggleNetwork}>
-        <option value="" disabled selected>Select Network</option>
+        <option defaultValue="">Select Network</option>
         {optionItems}
       </select>
      </div>

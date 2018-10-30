@@ -29,10 +29,10 @@ const Report = props  => {
   return (
     <div style={divStyle}>
       <div className="inputs">Start Date:
-       <input id="date-field" class="form-control strdate" min="1996-02-01" type="date" name="strtdate" required></input>
+       <input id="date-field" value={prevDays} className="form-control strdate" min="1996-02-01" max={today} type="date" name="strtdate" required></input>
       </div>
       <div className="inputs">End Date:
-       <input id="date-field" className="form-control enddate" min="1996-02-01" type="date" name="enddate" required></input>
+       <input id="date-field" value={today} className="form-control enddate" min="1996-02-01" max={today} type="date" name="enddate" required></input>
       </div>
       <button className="getReport btn btn-secondary">Submit</button>
     </div>

@@ -9,9 +9,12 @@
     "csvjson": "^5.1.0",
     "express": "^4.16.3",
     "google-auth-library": "^1.6.1",
+    "moment": "^2.22.2",
     "node-google-dfp": "^0.3.2",
     "react": "^16.5.2",
+    "react-datepicker": "^1.7.0",
     "react-dom": "^16.5.2",
+    "react-select": "^2.1.1",
     "uniqid": "^5.0.3",
     "util": "^0.11.0"
   },

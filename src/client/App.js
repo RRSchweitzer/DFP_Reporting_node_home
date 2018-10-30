@@ -5,6 +5,7 @@ import Networks from './Networks/Networks.js';
 import Report from './Report/Report.js';
 import axios from 'axios';
 import Select from 'react-select';
+import DatePicker from 'react-datepicker';
 
 const divStyle = {
   width: '300px',
@@ -23,13 +24,14 @@ const networkStyle = {
 };
 
 export default class App extends Component {
-  state = { 
+  state = {
     networks: [],
     selectedNetwork: "",
     keys: [],
     networkSelected: false,
     multiSelect: true,
     selectedOption: [],
+    "startDate": "10/10/2018"
   }
 
 
@@ -48,7 +50,7 @@ export default class App extends Component {
   }
 
 
-  handleChange = (selectedOption) => {
+  keysChange = (selectedOption) => {
     this.setState({ selectedOption });
     console.log('Option selected:', selectedOption);
   }
@@ -82,7 +84,7 @@ export default class App extends Component {
             isSearchable={true}
             isMulti={true}
             value={selectedOption}
-            onChange={this.handleChange}
+            onChange={this.keysChange}
             options={this.state.keys}
           />
         </div>
@@ -100,8 +102,10 @@ export default class App extends Component {
         {<Networks  toggleNetwork={() => this.toggleNetwork()}
                     networks={this.state.networks}
                     styles={networkStyle}/>}
+
         {keyComponent}
         {reportComponent}
+
       </div>
     );
   }
