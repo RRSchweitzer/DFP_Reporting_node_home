@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import './app.css';
 import ReactImage from './react.png';
 import Networks from './Networks/Networks.js';
-import Report from './Report/Report.js';
 import axios from 'axios';
 import Select from 'react-select';
-import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import DateRangeExample from './DatePicker/DatePicker.js';
 
 const divStyle = {
   width: '300px',
   display: 'inline-block',
-  marginTop: '5px'
+  marginTop: '5px',
+  zIndex: '2'
 };
 
 const networkStyle = {
@@ -31,7 +32,7 @@ export default class App extends Component {
     networkSelected: false,
     multiSelect: true,
     selectedOption: [],
-    "startDate": "10/10/2018"
+    isKeySelected: false
   }
 
 
@@ -44,14 +45,19 @@ export default class App extends Component {
       }));
   }
 
-  styleFn = (base, state) => {
-    // optionally spread base styles
-    return { ...base, color: state.isFocused ? 'blue' : 'red' };
-  }
-
-
   keysChange = (selectedOption) => {
-    this.setState({ selectedOption });
+    let isSelected = {}
+    if (selectedOption.length > 0) {
+      this.setState({ 
+        selectedOption,
+        isKeySelected: true
+      });
+    } else {
+      this.setState({ 
+        selectedOption,
+        isKeySelected: false
+      });
+    }
     console.log('Option selected:', selectedOption);
   }
   
@@ -59,7 +65,7 @@ export default class App extends Component {
     let selectedNetwork = document.querySelector('#funtime').value
     this.setState({
       selectedNetwork: selectedNetwork,
-      selectedOption: null
+      selectedOption: []
     })
     this.getKeys(selectedNetwork)
 
@@ -76,6 +82,8 @@ export default class App extends Component {
   render() {
     let keyComponent = null
     let reportComponent = null
+    let realkeyComponent = null
+
     const { selectedOption } = this.state;
     if (this.state.networkSelected === true) {
       keyComponent = (
@@ -90,22 +98,17 @@ export default class App extends Component {
         </div>
       )
     }
-    if (this.state.selectedOption !== null && this.state.selectedOption.length > 0) {
-      reportComponent = (
-        <Report
-          styles={divStyle}
-        />
-      )
-    }
+
     return (
       <div>
         {<Networks  toggleNetwork={() => this.toggleNetwork()}
                     networks={this.state.networks}
                     styles={networkStyle}/>}
-
         {keyComponent}
-        {reportComponent}
-
+        
+        <DateRangeExample 
+          isKeySelected={this.state.isKeySelected}
+        />
       </div>
     );
   }

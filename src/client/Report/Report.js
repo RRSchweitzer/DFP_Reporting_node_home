@@ -1,42 +1,56 @@
 import React from 'react';
 
-const divStyle = {
-  width: '100%',
-  display: 'inline-block',
-  marginTop: '5px'
-};
+class Report extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    const today = moment().subtract(1, "days").set({hour:0,minute:0,second:0,millisecond:0});
+    this.state = {
+      value: moment.range(today.clone().subtract(6, "days"), today.clone())
+    };
+  };
 
-const formatDate = (date) => {
-  let dd = date.getDate();
-  let mm = date.getMonth()+1; //January is 0!
-  let yyyy = date.getFullYear();
-  if (dd<10) {
-        dd='0'+dd
-    } 
-    if (mm<10) {
-        mm='0'+mm
+  getReporting = (networkId, keysArray) => {
+    fetch('/api/getKeys?networkId=' + networkId, + "&keysArray=" + keysArray, {method:'get', headers: {'Access-Control-Allow-Origin': '*'}})
+      .then(res => res.json())
+      .then(jsonData => this.setState({
+        jsonData: jsonData,
+      }));
+  }
+  
+  onSelect = (value, states) => {
+    this.setState({ value, states });
+  };
+
+  renderSelectionValue = () => {
+    return (
+      <div>
+        <div>Selection</div>
+        {this.state.value.start.format("YYYY-MM-DD")}
+        {" - "}
+        {this.state.value.end.format("YYYY-MM-DD")}
+      </div>
+    );
+  };
+
+  render() {
+    let DateRangeComponent = null
+
+    if (this.props.isKeySelected) {
+      DateRangeComponent = (
+          <DateRangePicker
+            value={this.state.value}
+            onSelect={this.onSelect}
+            singleDateRange={true}
+          />
+      )
     }
-    let returndate = yyyy+'-'+mm+'-'+dd;
-    return returndate;
-}
-
-let today = formatDate(new Date());
-let prevDays = formatDate(new Date(new Date().setDate(new Date().getDate()-7)));
-
-
-
-const Report = props  => {
-  return (
-    <div style={divStyle}>
-      <div className="inputs">Start Date:
-       <input id="date-field" value={prevDays} className="form-control strdate" min="1996-02-01" max={today} type="date" name="strtdate" required></input>
+    return (
+      <div>     
+        {DateRangeComponent}     
       </div>
-      <div className="inputs">End Date:
-       <input id="date-field" value={today} className="form-control enddate" min="1996-02-01" max={today} type="date" name="enddate" required></input>
-      </div>
-      <button className="getReport btn btn-secondary">Submit</button>
-    </div>
-  )
+    );
+  }
 }
 
 export default Report;
+
