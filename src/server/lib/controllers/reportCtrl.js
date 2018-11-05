@@ -5,26 +5,33 @@ const https = require('https');
 const csvjson = require('csvjson');
 
 parseJson = (dataArr, keyObj) => {
+	console.log("dataAray",dataArr)
   return new Promise ((resolve, reject) => {
 	  console.log("Parse Json NOW")
+  	var keyObj = [{"hb_pb_rubicon": ""},{"hb_pb": ""}]
+  	var newObj = {}
+	  for (var i = 0; i < keyObj.length; i++) {
+			keyObj[i]
+	  }
 	  var obj = {
-	    "hb_pb_rubicon": "",
-	    "hb_deal_rubicon": "",
-	  }
-	  var parsedJson = []
-	  for (var i = 1; i < dataArr[0].length; i++) {
-	    if (i === 1) {
-	      parsedJson.push(dataArr[0][0])    
-	    }
-	    if (obj.hasOwnProperty(dataArr[0][i][1].split('=')[0])) {
-	      parsedJson.push(dataArr[0][i])
-	    }
-	  }
-	  fs.unlink(dataArr[1], err => {
-	    if(err) return console.log(err);
-	    resolve(parsedJson);
-	  })
-  })
+			"hb_pb_rubicon": "",
+			"hb_deal_rubicon": "",
+		}
+		var parsedJson = []
+		parsedJson.push(dataArr[0][0])
+		for (var i = 0; i < keyObj.length; i++) {
+			for (var i = 1; i < dataArr[0].length; i++) {
+				console.log(keyObj[i].hasOwnProperty(dataArr[0][i][1].split('=')[0]))
+				if (keyObj[i].hasOwnProperty(dataArr[0][i][1].split('=')[0])) {
+					parsedJson.push(dataArr[0][i])
+				}
+			}
+		}
+		fs.unlink(dataArr[1], err => {
+			if(err) return console.log(err);
+			resolve(parsedJson);
+		})
+	})
 }
 
 csvToJson = (fileName) => {
