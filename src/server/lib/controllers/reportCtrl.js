@@ -3,35 +3,30 @@ const uniqid = require('uniqid');
 const zlib = require('zlib');
 const https = require('https');
 const csvjson = require('csvjson');
+var util = require('util')
 
 parseJson = (dataArr, keyObj) => {
-	console.log("dataAray",dataArr)
   return new Promise ((resolve, reject) => {
-	  console.log("Parse Json NOW")
-  	var keyObj = [{"hb_pb_rubicon": ""},{"hb_pb": ""}]
   	var newObj = {}
+	  var parsedJson = []
 	  for (var i = 0; i < keyObj.length; i++) {
-			keyObj[i]
+	  	console.log("In the fucking loop");
+	  	console.log(typeof (keyObj))
+			newObj[keyObj[i].value] = keyObj[i].label
+		}
+	  for (var i = 1; i < dataArr[0].length; i++) {
+	    if (i === 1) {
+	      parsedJson.push(dataArr[0][0])    
+	    }
+	    if (newObj.hasOwnProperty(dataArr[0][i][1].split('=')[0])) {
+	      parsedJson.push(dataArr[0][i])
+	    }
 	  }
-	  var obj = {
-			"hb_pb_rubicon": "",
-			"hb_deal_rubicon": "",
-		}
-		var parsedJson = []
-		parsedJson.push(dataArr[0][0])
-		for (var i = 0; i < keyObj.length; i++) {
-			for (var i = 1; i < dataArr[0].length; i++) {
-				console.log(keyObj[i].hasOwnProperty(dataArr[0][i][1].split('=')[0]))
-				if (keyObj[i].hasOwnProperty(dataArr[0][i][1].split('=')[0])) {
-					parsedJson.push(dataArr[0][i])
-				}
-			}
-		}
 		fs.unlink(dataArr[1], err => {
-			if(err) return console.log(err);
-			resolve(parsedJson);
-		})
-	})
+	    if(err) return console.log(err);
+	    resolve(parsedJson);
+	  })
+  })
 }
 
 csvToJson = (fileName) => {
@@ -45,7 +40,13 @@ csvToJson = (fileName) => {
 
 module.exports = {
 	pullReporting: (req, res) => {
-		dfpUser.getService('ReportService', function (reportService, startYear, endYear) {
+		let startDate = req.body.startDate.split("-");
+		let endDate = req.body.endDate.split("-");
+		let networkId = req.body.networkId;
+		let keysArray = req.body.keysArray;
+
+
+		dfpUser.getService('ReportService', function (reportService) {
 		var uid = uniqid()
 		var results = null;
 		var args = {
@@ -53,8 +54,8 @@ module.exports = {
 		    reportQuery: {
 		      dimensions: ['DATE', 'CUSTOM_CRITERIA'],
 		      columns: ['TOTAL_INVENTORY_LEVEL_IMPRESSIONS', 'AD_SERVER_TARGETED_IMPRESSIONS'],
-		      startDate: { year: 2018, month: 1, day: 1 },
-		      endDate: { year: 2018, month: 1, day: 7 },
+		      startDate: { year: startDate[0], month: startDate[1], day: startDate[2] },
+		      endDate: { year: endDate[0], month: endDate[1], day: endDate[2] },
 		    }
 		  }
 		};
@@ -90,7 +91,7 @@ module.exports = {
 		  })
 		}
 
-		function check_report_ready() {
+		check_report_ready = ()  => {
 		  var reportId = results.rval.id;
 		  reportService.getReportJobStatus({reportJobId : reportId}, function (err, data) {
 		    if (err) {
@@ -109,18 +110,17 @@ module.exports = {
 		        }
 		      };
 
-		      reportService.getReportDownloadUrlWithOptions(download_args, (err, data) => {
-		        if (err) {
+		      reportService.getReportDownloadUrlWithOptions(download_args, (err, data) => {		        if (err) {
 		          return console.log('ERROR', err.body);
 		        }
 		        console.log("Downloading report from " + data);
 		        download_report(data.rval)
-		        .then(dataArr => {
-		          // Parse JSON
-		          console.log("Got JSON Data")
-		          parseJson(dataArr)
-		          .then(parsedJson => {
-		          	res.status(200).json(parsedJson);
+		        .then((dataArr) => {
+							// Parse JSON
+							console.log("Got JSON Data")
+							parseJson(dataArr, keysArray)
+							.then(parsedJson => {
+								res.status(200).json(parsedJson);
 		          })
 		        })
 		      });

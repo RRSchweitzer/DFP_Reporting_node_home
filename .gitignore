@@ -4,3 +4,4 @@ webpack.config.js
 *.p12
 config.json
 ryan_key.json
+*DS_Store

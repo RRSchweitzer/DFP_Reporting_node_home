@@ -1,22 +1,47 @@
 import React from 'react';
+import axios from 'axios';
 
 class Report extends React.Component {
   constructor(props, context) {
     super(props, context);
-    const today = moment().subtract(1, "days").set({hour:0,minute:0,second:0,millisecond:0});
     this.state = {
-      value: moment.range(today.clone().subtract(6, "days"), today.clone())
-    };
-  };
-
-  getReporting = (networkId, keysArray) => {
-    fetch('/api/getKeys?networkId=' + networkId, + "&keysArray=" + keysArray, {method:'get', headers: {'Access-Control-Allow-Origin': '*'}})
-      .then(res => res.json())
-      .then(jsonData => this.setState({
-        jsonData: jsonData,
-      }));
+      jsonData: null,
+    }
   }
-  
+
+  getReporting = (networkId, keysArray, startDate, endDate) => {
+    fetch('/api/getReporting', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        networkId: networkId,
+        keysArray: keysArray,
+        startDate: startDate,
+        endDate: endDate
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        var lineArray = [];
+        data.forEach(function (infoArray, index) {
+           var line = infoArray.join(",");
+           lineArray.push(index == 0 ? "data:text/csv;charset=utf-8," + line : line);
+        });
+        var csvContent = lineArray.join("\n");
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", name + "_" + startDate + "_" + endDate);
+        document.body.appendChild(link); // Required for FF
+        link.click();
+        document.body.removeChild(link);            
+          // spinner.stop()
+    });
+  }
+
   onSelect = (value, states) => {
     this.setState({ value, states });
   };
@@ -25,29 +50,19 @@ class Report extends React.Component {
     return (
       <div>
         <div>Selection</div>
-        {this.state.value.start.format("YYYY-MM-DD")}
+        {this.state.value.start}
         {" - "}
-        {this.state.value.end.format("YYYY-MM-DD")}
+        {this.state.value.end}
       </div>
     );
   };
 
   render() {
     let DateRangeComponent = null
-
-    if (this.props.isKeySelected) {
-      DateRangeComponent = (
-          <DateRangePicker
-            value={this.state.value}
-            onSelect={this.onSelect}
-            singleDateRange={true}
-          />
-      )
-    }
+    let reportButton = null
+    console.log(typeof this.props.keysArray)
     return (
-      <div>     
-        {DateRangeComponent}     
-      </div>
+      <button onClick={() => this.getReporting(this.props.networkId, this.props.keysArray, this.props.startDate.format("YYYY-MM-DD"), this.props.endDate.format("YYYY-MM-DD"))}> Get Report</button>
     );
   }
 }

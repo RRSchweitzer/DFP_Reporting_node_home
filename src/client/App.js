@@ -108,6 +108,10 @@ export default class App extends Component {
         
         <DateRangeExample 
           isKeySelected={this.state.isKeySelected}
+          selectedNetwork={this.state.selectedNetwork}
+          keysArray={this.state.selectedOption}
+          startDate={this.state.value}
+          endDate={this.state.value}
         />
       </div>
     );
