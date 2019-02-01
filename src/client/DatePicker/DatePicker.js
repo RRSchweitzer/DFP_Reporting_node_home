@@ -17,8 +17,6 @@ class Example extends React.Component {
   };
 	
   onSelect = (value, states) => {
-  	console.log(value)
-  	console.log(states)
     this.setState({ value, states });
   };
 
@@ -41,6 +39,7 @@ class Example extends React.Component {
       ReportButton = (
          	<Report
          		networkId={this.props.selectedNetwork}
+            timeZone={this.props.selectedTimeZone}
           	isKeySelected={this.props}
           	keysArray={this.props.keysArray}
           	startDate={this.state.value.start}
@@ -51,7 +50,6 @@ class Example extends React.Component {
     return (
       <div>     
        	{DateRangeComponent}
-    
 				{ReportButton}
       </div>     
 

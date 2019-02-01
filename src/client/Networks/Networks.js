@@ -6,11 +6,11 @@ const Networks = ( props ) => {
     let networks = props.networks;
     let optionItems
     optionItems = networks.map((network, index) =>
-      <option onChange={props.toggleNetwork} value={network.networkCode} key={index}>{network.displayName} </option>
+      <option onChange={props.toggleNetwork} value={network.networkCode + "-" + network.timeZone} key={index}>{network.displayName} </option>
     );
     return (
      <div>
-      <select id="funtime" style={props.styles}
+      <select id="networks" style={props.styles}
         value={props.selectedNetwork}
         onChange={props.toggleNetwork}>
         <option defaultValue="">Select Network</option>

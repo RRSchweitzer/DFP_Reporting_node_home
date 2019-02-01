@@ -28,6 +28,7 @@ export default class App extends Component {
   state = {
     networks: [],
     selectedNetwork: "",
+    selectedTimeZone: "",
     keys: [],
     networkSelected: false,
     multiSelect: true,
@@ -62,9 +63,12 @@ export default class App extends Component {
   }
   
   toggleNetwork = () => {
-    let selectedNetwork = document.querySelector('#funtime').value
+    let networkInfoArr = document.querySelector('#networks').value.split("-");
+    let selectedNetwork = networkInfoArr[0]
+    let selectedTimeZone = networkInfoArr[1]
     this.setState({
       selectedNetwork: selectedNetwork,
+      selectedTimeZone: selectedTimeZone,
       selectedOption: []
     })
     this.getKeys(selectedNetwork)
@@ -109,6 +113,7 @@ export default class App extends Component {
         <DateRangeExample 
           isKeySelected={this.state.isKeySelected}
           selectedNetwork={this.state.selectedNetwork}
+          selectedTimeZone={this.state.selectedTimeZone}
           keysArray={this.state.selectedOption}
           startDate={this.state.value}
           endDate={this.state.value}

@@ -1,3 +1,10 @@
+const Dfp = require('node-google-dfp');
+const {JWT} = require('google-auth-library');
+const config = require('../../../../config.json');
+const jwtClient = new JWT(config.serviceAccountEmail, config.prebidKey , null, ['https://www.googleapis.com/auth/dfp']);
+const dfpUser = new Dfp.User(config.networkCode, config.appName, config.version);
+
+dfpUser.setClient(jwtClient);
 
 module.exports = {
   getNetworks: (req, res) => {
@@ -10,6 +17,7 @@ module.exports = {
       	if (err) {
         	res.status(500).json(err);
 	      }
+        // console.log(results)
       	res.status(200).json(results);
       })
 		})			

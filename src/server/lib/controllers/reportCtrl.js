@@ -3,8 +3,19 @@ const uniqid = require('uniqid');
 const zlib = require('zlib');
 const https = require('https');
 const csvjson = require('csvjson');
-var util = require('util')
+const util = require('util')
+const events = require('events');
+var eventEmitter = new events.EventEmitter();
 
+//Create an event handler:
+let dfpResultsIn = false
+const dfpFinishedEvent = function () {
+  dfpResultsIn = true
+}
+let paResultsIn = false
+const paFinishedEvent = function () {
+  dfpResultsIn = true
+}
 parseJson = (dataArr, keyObj) => {
   return new Promise ((resolve, reject) => {
   	var newObj = {}
@@ -45,7 +56,6 @@ module.exports = {
 		let networkId = req.body.networkId;
 		let keysArray = req.body.keysArray;
 
-
 		dfpUser.getService('ReportService', function (reportService) {
 		var uid = uniqid()
 		var results = null;
@@ -62,7 +72,7 @@ module.exports = {
 		getFile = download_url => {
 		  return new Promise ((resolve, reject) => {
 		    https.get(download_url, response => {
-		      console.log("getFile")
+		      console.log({"getFile": "hi"})
 		      resolve(response);
 		    })
 		  })
