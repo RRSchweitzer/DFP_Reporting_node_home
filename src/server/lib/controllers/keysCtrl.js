@@ -52,7 +52,6 @@ const getKeyNames =(networkId) => {
 
 module.exports = {
   getKeys: (req, res) => {
-    console.log(req.query.networkId)
     //path to file you're serving
     let keyNames = [];
     getKeyNames(req.query.networkId)

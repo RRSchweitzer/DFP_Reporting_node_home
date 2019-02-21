@@ -5,10 +5,205 @@ import Networks from './Networks/Networks.js';
 import axios from 'axios';
 import Select from 'react-select';
 import 'react-datepicker/dist/react-datepicker.css';
-import DateRangeExample from './DatePicker/DatePicker.js';
+import DatePicker from './DatePicker/DatePicker.js';
+import BootstrapTable from 'react-bootstrap-table-next';
+
+const paColumns = [
+{
+  dataField: 'date',
+  text: 'Date',
+  sort: true,
+  headerStyle: (colum, colIndex) => {
+    return { width: '40px', textAlign: 'center'};
+  }
+}, {
+  dataField: 'revenue',
+  text: 'Revenue',
+  sort: true,
+  headerStyle: (colum, colIndex) => {
+    return { width: '50px', textAlign: 'center'};
+  }
+}, {
+  dataField: 'auctions_won',
+  text: 'Auctions Won',
+  classes: 'id-custom-cell',
+  sort: true,
+  headerStyle: (colum, colIndex) => {
+    return { width: '20px', textAlign: 'center' };
+  }
+},{
+  dataField: 'paid_impression',
+  text: 'Paid Impressions',
+  sort: true,
+  headerStyle: (colum, colIndex) => {
+    return { width: '40px', textAlign: 'center' };
+  }
+},{
+  dataField: 'auctions',
+  text: 'Auctions',
+  sort: true,
+  headerStyle: (colum, colIndex) => {
+    return { width: '40px', textAlign: 'center' };
+  }
+}]
+
+
+
+const dfpColumns = [
+{
+  dataField: 'dates',
+  text: 'Date',
+  sort: true,
+  sortFunc: (a, b, order, dataField, rowA, rowB) => {
+    if (order === 'asc') {
+      return b - a;
+    }
+    return a - b; // desc
+  },
+  components: {
+    sortElement: true,
+    filterElement: true
+  },
+  sortFunc: (a, b, order, dataField, rowA, rowB) => {
+    if (order === 'asc') {
+      return b - a;
+    }
+    return a - b; // desc
+  },
+  sortCaret: (order, column) => {
+    if (order === "asc") {
+      return (<span className="container">&#9650;</span>)
+    } else if (order === "desc") {
+      return (<span className="container">&#9660;</span>)
+    } else {
+      return (<span className="container">&#9650;</span>)
+    }
+  },
+  headerStyle: (colum, colIndex) => {
+    return { width: '40px', textAlign: 'center'};
+  }
+}, {
+  dataField: 'kvs',
+  text: 'KV Pair',
+  sort: true,
+  sortCaret: (order, column) => {
+    if (order === "asc") {
+      return (<span className="container">&#9650;</span>)
+    } else if (order === "desc") {
+      return (<span className="container">&#9660;</span>)
+    } else {
+      return (<span className="container">&#9650;</span>)
+    }
+  },
+  sortFunc: (a, b, order, dataField, rowA, rowB) => {
+    if (order === 'asc') {
+      return b - a;
+    }
+    return a - b; // desc
+  },
+  headerStyle: (colum, colIndex) => {
+    return { width: '50px', textAlign: 'center'};
+  }
+}, {
+  dataField: 'imps',
+  text: 'Impressions',
+  sort: true,
+  sortCaret: (order, column) => {
+    if (order === "asc") {
+      return (<span className="container">&#9650;</span>)
+    } else if (order === "desc") {
+      return (<span className="container">&#9660;</span>)
+    } else {
+      return (<span className="container">&#9650;</span>)
+    }
+  },
+  sortFunc: (a, b, order, dataField, rowA, rowB) => {
+    if (order === 'asc') {
+      return b - a;
+    }
+    return a - b; // desc
+  },
+  headerStyle: (colum, colIndex) => {
+    return { width: '20px', textAlign: 'center' };
+  }
+},{
+  dataField: 'targImps',
+  text: 'Total Targeted Impressions',
+  sort: true,
+  sortCaret: (order, column) => {
+    if (order === "asc") {
+      return (<span className="container">&#9650;</span>)
+    } else if (order === "desc") {
+      return (<span className="container">&#9660;</span>)
+    } else {
+      return (<span className="container">&#9650;</span>)
+    }
+  },
+  sortFunc: (a, b, order, dataField, rowA, rowB) => {
+    if (order === 'asc') {
+      return b - a;
+    }
+    return a - b; // desc
+  },
+  onSort: (field, order) => {
+    console.log(field)
+    console.log(order)
+  },
+  headerStyle: (colum, colIndex) => {
+    return { width: '40px', textAlign: 'center' };
+  }
+}];
+
+
+const mergeColumns = [
+{
+  dataField: 'date',
+  text: 'DFPDate',
+  sort: true,
+  headerStyle: (colum, colIndex) => {
+    return { width: '40px', textAlign: 'center'};
+  }
+},
+{
+  dataField: 'paDate',
+  text: 'PaDate',
+  sort: true,
+  headerStyle: (colum, colIndex) => {
+    return { width: '40px', textAlign: 'center'};
+  }
+},{
+  dataField: 'TI/AW',
+  text: 'TI/AW',
+  sort: true,
+  headerStyle: (colum, colIndex) => {
+    return { width: '50px', textAlign: 'center'};
+  }
+}, {
+  dataField: 'PI/TTI',
+  text: 'PI/TTI',
+  sort: true,
+  headerStyle: (colum, colIndex) => {
+    return { width: '20px', textAlign: 'center' };
+  }
+},{
+  dataField: 'PI/AW',
+  text: 'PI/AW',
+  sort: true,
+  headerStyle: (colum, colIndex) => {
+    return { width: '20px', textAlign: 'center' };
+  }
+},{
+  dataField: 'AW/A',
+  text: 'AW/A',
+  sort: true,
+  headerStyle: (colum, colIndex) => {
+    return { width: '40px', textAlign: 'center' };
+  }
+}];
+
 
 const divStyle = {
-  width: '300px',
+  width: '100%',
   display: 'inline-block',
   marginTop: '5px',
   zIndex: '2'
@@ -21,20 +216,26 @@ const networkStyle = {
   "borderStyle": "solid",
   "borderWidth": "1px",
   "height": "40px",
-  "width": "300px"
+  "width": "100%"
 };
 
 export default class App extends Component {
-  state = {
-    networks: [],
-    selectedNetwork: "",
-    keys: [],
-    networkSelected: false,
-    multiSelect: true,
-    selectedOption: [],
-    isKeySelected: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      networks: [],
+      selectedNetwork: "",
+      selectedTimeZone: "",
+      keys: [],
+      networkSelected: false,
+      multiSelect: true,
+      selectedOption: [],
+      isKeySelected: false,
+      dfpData: [],
+      paData: [],
+      other: []
+    }
   }
-
 
   getKeys = (networkId) => {
     fetch('/api/getKeys?networkId=' + networkId, {method:'get', headers: {'Access-Control-Allow-Origin': '*'}})
@@ -46,9 +247,9 @@ export default class App extends Component {
   }
 
   keysChange = (selectedOption) => {
-    let isSelected = {}
+    let isSelected = {};
     if (selectedOption.length > 0) {
-      this.setState({ 
+      this.setState({
         selectedOption,
         isKeySelected: true
       });
@@ -60,17 +261,31 @@ export default class App extends Component {
     }
     console.log('Option selected:', selectedOption);
   }
-  
+
   toggleNetwork = () => {
-    let selectedNetwork = document.querySelector('#funtime').value
+    let networkInfoArr = document.querySelector('#networks').value.split("-");
+    let selectedNetwork = networkInfoArr[0]
+    let selectedTimeZone = networkInfoArr[1]
     this.setState({
       selectedNetwork: selectedNetwork,
+      selectedTimeZone: selectedTimeZone,
       selectedOption: []
     })
     this.getKeys(selectedNetwork)
-
   }
-  componentDidMount() {
+  dfpHandler = (dfpData) => {
+    this.setState(dfpData)
+  }
+
+  paHandler = (paData) => {
+    this.setState(paData)
+  }
+
+  otherHandler = (other) => {
+    console.log(other)
+    this.setState(other)
+  }
+  componentDidMount = () => {
     let networkList = [];
     fetch('/api/getNetworks')
       .then(res => res.json())
@@ -83,7 +298,9 @@ export default class App extends Component {
     let keyComponent = null
     let reportComponent = null
     let realkeyComponent = null
-
+    let dfpData = []
+    let paData = []
+    let other = []
     const { selectedOption } = this.state;
     if (this.state.networkSelected === true) {
       keyComponent = (
@@ -98,18 +315,51 @@ export default class App extends Component {
         </div>
       )
     }
-
+    if (this.state.dfpData.length < 0) {
+      dfpData = []
+    } else {
+      dfpData = this.state.dfpData
+    }
+    if (this.state.paData.length < 0) {
+      paData = []
+    } else {
+      paData = this.state.paData
+    }
+    if (this.state.other.length < 0) {
+      other = []
+    } else {
+      other = this.state.other
+    }
     return (
-      <div>
-        {<Networks  toggleNetwork={() => this.toggleNetwork()}
-                    networks={this.state.networks}
-                    styles={networkStyle}/>}
-        {keyComponent}
-        
-        <DateRangeExample 
+      <div className="container">
+        <div className="row">
+        <div className="col-3">
+          <div>
+            {<Networks toggleNetwork={() => this.toggleNetwork()}
+                       networks={this.state.networks}
+                      styles={networkStyle}/>}
+          </div>
+            {keyComponent}
+        <DatePicker
+          dfpHandler={this.dfpHandler}
+          paHandler={this.paHandler}
+          otherHandler={this.otherHandler}
           isKeySelected={this.state.isKeySelected}
+          selectedNetwork={this.state.selectedNetwork}
+          selectedTimeZone={this.state.selectedTimeZone}
+          keysArray={this.state.selectedOption}
+          startDate={this.state.value}
+          endDate={this.state.value}
         />
       </div>
+      <div className="col-9">
+        <BootstrapTable classes="react-bootstrap-table" keyField='id' width={'20%'} data={ other } columns={ mergeColumns } />
+        <BootstrapTable classes="react-bootstrap-table" keyField='id' width={'20%'} data={ paData } columns={ paColumns } />
+        <BootstrapTable classes="react-bootstrap-table" keyField='id' width={'20%'} data={ dfpData } columns={ dfpColumns } />
+      </div>
+      </div>
+    </div>
+
     );
   }
 }
