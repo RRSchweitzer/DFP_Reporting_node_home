@@ -1,24 +1,12 @@
-const Dfp = require('node-google-dfp');
-const {JWT} = require('google-auth-library');
 const express = require('express');
 const bodyParser = require('body-parser');
-const config = require('../../config.json');
 const os = require('os');
 const cors = require('cors');
 const request = require('request');
 const port = process.env.EXPRESS_PORT || 8080;
 const app = express();
-const jwtClient = new JWT(config.serviceAccountEmail, config.prebidKey , null, ['https://www.googleapis.com/auth/dfp']);
-const dfpUser = new Dfp.User(config.networkCode, config.appName, config.version);
 const moment = require('moment-timezone')
 
-
-dfpUser.setClient(jwtClient);
-let now = moment().tz('America/Los_Angeles').format()
-// console.log(now)
-
-// console.log("NYtime", moment.locale().tz('America/New_York').format('ha z'))
-// console.log("LA time", moment(Date.now).tz('America/Los_Angeles').format('ha z'))
 var corsOptions = {
 	origin: (origin, callback) =>  {
 	  callback(null, true)
@@ -44,7 +32,6 @@ app.post('/api/pullReporting', reportCtrl.pullReporting);
 app.post('/api/pullPAReporting', paCtrl.getPaData);
 app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
 
-
-module.exports.dfpUser = dfpUser
+// module.exports.dfpUser = dfpUser
 
 app.listen(8080, () => console.log('Listening on port 8080!'));

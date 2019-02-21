@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import DataTable from '../DataTable/DataTable.js';
 
 class Report extends React.Component {
   constructor(props, context) {
@@ -8,95 +9,79 @@ class Report extends React.Component {
       jsonData: null,
     }
   };
+  mergePaDfpData = (paData, DFPData) => {
+    console.log(paData)
+    let holder = {};
+    for (let i = 0; i < DFPData.length; i++) {
+      if (!holder.hasOwnProperty(DFPData[i].dates)) {
+        holder[DFPData[i].dates] = {
+          "date": DFPData[i].dates,
+          "imps": parseInt(DFPData[i].imps),
+          "targImps": parseInt(DFPData[i].targImps)
+        }
+      } else {
+        holder[DFPData[i].dates].imps += parseInt(DFPData[i].imps)
+        holder[DFPData[i].dates].targImps += parseInt(DFPData[i].targImps)
+      }      
+    }
+    const keys = Object.keys(holder);
+
+    let finishedShit = [];
+    for (let i = 0, len = keys.length; i < len; i++) {
+      if(paData[i].date === holder[keys[i]].date) {
+        finishedShit[i] = {
+          "date": holder[keys[i]].date,
+          "paDate": paData[i].date,
+          "TI/AW": (holder[keys[i]].imps / paData[i].auctions_won * 100).toFixed(2),
+          "PI/TTI": (paData[i].paid_impression / holder[keys[i]].targImps * 100).toFixed(2),
+          "PI/AW": (paData[i].paid_impression / paData[i].auctions_won * 100).toFixed(2),
+          "AW/A": (paData[i].auctions_won /paData[i].auctions * 100).toFixed(2),
+        }
+      }
+    }
+    return finishedShit
+  }
 
   getReporting = (networkId, accountId, timeZone, keysArray, startDate, endDate) => {
-    console.log(endDate.endOf("day").format())
-    fetch('/api/pullPAReporting', {
+    const apiRequest1 = fetch('/api/pullPAReporting', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        accountId: 10306,
+        accountId: accountId,
         timeZone: timeZone,
-        startDate: startDate.format(),
-        endDate: endDate.format()
+        startDate: startDate,
+        endDate: endDate
       })
     }).then(res => res.json())
 
-  //   let apiRequest1 = fetch('/api/pullPAReporting', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       accountId: accountId,
-  //       timeZone: timeZone,
-  //       startDate: startDate,
-  //       endDate: endDate
-  //     })
-  //   }).then(res => res.json())
-
-  //   let apiRequest2 = fetch('/api/pullReporting', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       networkId: networkId,
-  //       keysArray: keysArray,
-  //       startDate: startDate,
-  //       endDate: endDate
-  //     })
-  //   }).then(res => res.json())
-  // var combinedData = {"apiRequest1":{},"apiRequest2":{}};
-  
-  // Promise.all([apiRequest1,apiRequest2]).then(function(values){
-  //   console.log("this isn't working because you're stupid")
-  //   combinedData["apiRequest1"] = values[0];
-  //   combinedData["apiRequest2"] = values[1];
-  //   console.log(combinedData)
-  //   return combinedData;
-  // });
-  // ========= OLD SHIT ===================
-  //   fetch('/api/pullReporting', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       networkId: networkId,
-  //       keysArray: keysArray,
-  //       startDate: startDate,
-  //       endDate: endDate
-  //     })
-  //   })
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       let lineArray = [];
-  //       data.forEach((infoArray, index) => {
-  //          let line = infoArray.join(",");
-  //          lineArray.push(index == 0 ? "data:text/csv;charset=utf-8," + line : line);
-  //       });
-  //       let csvContent = lineArray.join("\n");
-  //       let encodedUri = encodeURI(csvContent);
-  //       let link = document.createElement("a");
-  //       link.setAttribute("href", encodedUri);
-  //       link.setAttribute("download", name + "_" + startDate + "_" + endDate);
-  //       document.body.appendChild(link); // Required for FF
-  //       link.click();
-  //       document.body.removeChild(link);            
-  //         // spinner.stop()
-  //   });
+    const apiRequest2 = fetch('/api/pullReporting', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        networkId: networkId,
+        keysArray: keysArray,
+        startDate: startDate,
+        endDate: endDate
+      })
+    }).then(res => res.json())
+    const combinedData = {"paData":{},"DFPData":{}};
+    Promise.all([apiRequest1,apiRequest2]).then(values => {
+      combinedData["paData"] = values[0];
+      combinedData["DFPData"] = values[1];
+      let mergedData = this.mergePaDfpData(combinedData["paData"], combinedData["DFPData"])
+      this.props.setDfpState(combinedData["DFPData"])
+      this.props.setPaState(combinedData["paData"])
+      console.log("merged BITCH!", mergedData)
+      this.props.setOtherState(mergedData)
+    });
   }
 
-  onSelect = (value, states) => {
-    this.setState({ value, states });
-  };
 
   renderSelectionValue = () => {
     return (
@@ -112,9 +97,10 @@ class Report extends React.Component {
   render() {
     let DateRangeComponent = null
     let reportButton = null
-    console.log( this.props.endDate)
     return (
-      <button onClick={() => this.getReporting(this.props.networkId, 10306, this.props.timeZone, this.props.keysArray, this.props.startDate, this.props.endDate)}> Get Report</button>
+      <div>
+        <button onClick={() => this.getReporting(this.props.networkId, 10306, this.props.timeZone, this.props.keysArray, this.props.startDate, this.props.endDate)}> Get Report</button>
+      </div>
     );
   }
 }

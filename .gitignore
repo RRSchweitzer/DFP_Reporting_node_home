@@ -1,7 +1,9 @@
 node_modules
+config.py
+package-lock.json
 webpack.config.js
 *.yaml
 *.p12
 config.json
 ryan_key.json
-*DS_Store
+.DS_Store
