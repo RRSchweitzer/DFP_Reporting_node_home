@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './app.css';
 import ReactImage from './react.png';
 import Networks from './Networks/Networks.js';
+import Header from './Header/Header.js';
 import axios from 'axios';
 import Select from 'react-select';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -332,6 +333,9 @@ export default class App extends Component {
     }
     return (
       <div className="container">
+        <Header
+          networks={this.state.networks}
+        />
         <div className="row">
         <div className="col-3">
           <div>

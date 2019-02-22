@@ -57,7 +57,6 @@ class DatePicker extends React.Component {
     }
     return (
       <div>
-       
        	{DateRangeComponent}
 				{ReportButton}
       </div>     
