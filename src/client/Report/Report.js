@@ -75,10 +75,9 @@ class Report extends React.Component {
       combinedData["paData"] = values[0];
       combinedData["DFPData"] = values[1];
       let mergedData = this.mergePaDfpData(combinedData["paData"], combinedData["DFPData"])
-      this.props.setDfpState(combinedData["DFPData"])
-      this.props.setPaState(combinedData["paData"])
-      console.log("merged BITCH!", mergedData)
-      this.props.setOtherState(mergedData)
+      this.props.setEvent("dfpData", combinedData["DFPData"])
+      this.props.setEvent("paData", combinedData["paData"])
+      this.props.setEvent("other", mergedData)
     });
   }
 

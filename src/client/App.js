@@ -273,18 +273,18 @@ export default class App extends Component {
     })
     this.getKeys(selectedNetwork)
   }
-  dfpHandler = (dfpData) => {
-    this.setState(dfpData)
+
+  inputChangeHandler = (event, data) => {
+    console.log(event)
+    console.log(data)
+      var stateObject = function() {
+        var returnObj = {};
+        returnObj[event] = data;
+           return returnObj;
+      }.bind(event)();
+      this.setState( stateObject );    
   }
 
-  paHandler = (paData) => {
-    this.setState(paData)
-  }
-
-  otherHandler = (other) => {
-    console.log(other)
-    this.setState(other)
-  }
   componentDidMount = () => {
     let networkList = [];
     fetch('/api/getNetworks')
@@ -341,15 +341,13 @@ export default class App extends Component {
           </div>
             {keyComponent}
         <DatePicker
-          dfpHandler={this.dfpHandler}
-          paHandler={this.paHandler}
-          otherHandler={this.otherHandler}
           isKeySelected={this.state.isKeySelected}
           selectedNetwork={this.state.selectedNetwork}
           selectedTimeZone={this.state.selectedTimeZone}
           keysArray={this.state.selectedOption}
           startDate={this.state.value}
           endDate={this.state.value}
+          inputChangeHandler={this.inputChangeHandler}
         />
       </div>
       <div className="col-9">

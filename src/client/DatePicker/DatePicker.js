@@ -23,17 +23,10 @@ class DatePicker extends React.Component {
     this.setState({ value, states });
   };
 
-  setDfpState = (dfpData, data) => {
-    this.props.dfpHandler({ dfpData });
+  setEvent = (other, data) => {
+    this.props.inputChangeHandler(other, data);
   };
 
-  setPaState = (paData, data) => {
-    this.props.paHandler( {paData} );
-  };
-
-  setOtherState = (other, data) => {
-    this.props.otherHandler({ other });
-  };
   render() {
     let DateRangeComponent = null
 		let ReportButton = null
@@ -57,9 +50,7 @@ class DatePicker extends React.Component {
           keysArray={this.props.keysArray}
           startDate={this.state.value.start}
           endDate={this.state.value.end}
-          setPaState={this.setPaState}
-          setDfpState={this.setDfpState}
-          setOtherState={this.setOtherState}
+          setEvent={this.setEvent}
       	/>
       </div>
       )
